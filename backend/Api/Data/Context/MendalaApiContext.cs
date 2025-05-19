@@ -1,0 +1,102 @@
+using Api.Data.Entities;
+using Api.Models.AuditableEntity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace Api.Data.Context;
+
+public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
+	: IdentityDbContext<User, IdentityRole, string>(options)
+{
+	public DbSet<Issue> Issues { get; set; }
+	public DbSet<Invoice> Invoices { get; set; }
+	public DbSet<Product> Products { get; set; }
+	public DbSet<Customer> Customers { get; set; }
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		base.OnModelCreating(modelBuilder);
+
+		modelBuilder.Entity<Issue>(entity =>
+		{
+			entity.HasOne(i => i.Invoice)
+				.WithMany(inv => inv.Issues) 
+				.HasForeignKey(i => i.InvoiceId)
+				.IsRequired();
+
+			entity.HasOne(i => i.Creator)
+				.WithMany(u => u.Issues)
+				.HasForeignKey(i => i.CreatorId)
+				.IsRequired();
+		});
+
+		modelBuilder.Entity<Customer>()
+			.HasMany(c => c.Invoices)
+			.WithOne(i => i.Customer) 
+			.HasForeignKey(i => i.CustomerId) 
+			.IsRequired();
+		
+		modelBuilder.Entity<Product>()
+			.HasMany(p => p.InvoiceItems)
+			.WithOne(ii => ii.Product)
+			.HasForeignKey(ii => ii.ProductId)
+			.IsRequired();
+		
+		modelBuilder.Entity<InvoiceItem>()
+			.HasOne(ii => ii.Product)
+			.WithMany(p => p.InvoiceItems)
+			.HasForeignKey(ii => ii.ProductId)
+			.IsRequired();
+		
+		modelBuilder.Entity<Invoice>(entity =>
+		{
+			entity.HasOne(i => i.Customer)
+				.WithMany(c => c.Invoices)
+				.HasForeignKey(i => i.CustomerId)
+				.IsRequired();
+
+			entity.HasMany(i => i.Issues)
+				.WithOne(i => i.Invoice)
+				.HasForeignKey(i => i.InvoiceId)
+				.IsRequired();
+
+			entity.HasMany(i => i.InvoiceItems)
+				.WithOne(ii => ii.Invoice)
+				.HasForeignKey(ii => ii.InvoiceId)
+				.IsRequired();
+		});
+
+		
+	}
+
+	public override int SaveChanges()
+	{
+		UpdateTimestamps();
+		return base.SaveChanges();
+	}
+
+	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+	{
+		UpdateTimestamps();
+		return base.SaveChangesAsync(cancellationToken);
+	}
+
+	private void UpdateTimestamps()
+	{
+		var entries = ChangeTracker.Entries()
+			.Where(e => e.Entity is IAuditable && 
+			            (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+
+		foreach (var entry in entries)
+		{
+			if (entry.State == EntityState.Added)
+			{
+				entry.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
+			}
+
+			entry.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+		}
+	}
+}
