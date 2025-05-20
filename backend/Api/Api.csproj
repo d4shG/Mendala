@@ -17,7 +17,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
+      <Folder Include="Controllers\CustomerController\" />
+      <Folder Include="Controllers\InvoiceController\" />
+      <Folder Include="Controllers\ProductController\" />
+      <Folder Include="Controllers\StatusHistoryController\" />
+      <Folder Include="Controllers\UserController\" />
       <Folder Include="Repositories\" />
       <Folder Include="Services\" />
     </ItemGroup>
