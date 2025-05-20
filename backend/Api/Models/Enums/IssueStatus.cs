@@ -2,7 +2,9 @@ namespace Api.Models.Enums;
 
 public enum IssueStatus
 {
-	Open,
+	Received,
+	Diagnosed,
 	InProgress,
-	Closed,
+	Completed,
+	Returned,
 }
