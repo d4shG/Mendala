@@ -8,7 +8,7 @@ public class Issue : IAuditable
 {
 	public Guid Id { get; set; }
 	public IssueType Type { get; set; }
-	public IssueStatus Status { get; set; } = IssueStatus.Open;
+	public IssueStatus Status { get; set; } = IssueStatus.Received;
 
 	[Required, MaxLength(100), MinLength(10)]
 	public string Title { get; set; }
@@ -25,4 +25,6 @@ public class Issue : IAuditable
 
 	[Required] public Guid CreatorId { get; set; }
 	public User Creator { get; set; }
+	
+	public ICollection<IssueStatusHistory> StatusHistory { get; set; } = new List<IssueStatusHistory>();
 }
