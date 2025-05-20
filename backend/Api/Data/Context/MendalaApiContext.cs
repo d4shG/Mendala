@@ -13,6 +13,7 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 	public DbSet<Invoice> Invoices { get; set; }
 	public DbSet<Product> Products { get; set; }
 	public DbSet<Customer> Customers { get; set; }
+	public DbSet<IssueStatusHistory> IssueStatusHistory { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -66,18 +67,28 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 				.HasForeignKey(ii => ii.InvoiceId)
 				.IsRequired();
 		});
+		
+		modelBuilder.Entity<IssueStatusHistory>(b =>
+		{
+			b.HasOne(h => h.Issue)
+				.WithMany(i => i.StatusHistory)
+				.HasForeignKey(h => h.IssueId)
+				.IsRequired();
+		});
 
 		
 	}
 
 	public override int SaveChanges()
 	{
+		AddStatusHistoryEntries();
 		UpdateTimestamps();
 		return base.SaveChanges();
 	}
 
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
+		AddStatusHistoryEntries();
 		UpdateTimestamps();
 		return base.SaveChangesAsync(cancellationToken);
 	}
@@ -97,6 +108,26 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 			}
 
 			entry.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+		}
+	}
+	
+	private void AddStatusHistoryEntries()
+	{
+		var entries = ChangeTracker.Entries<Issue>()
+			.Where(e => e.State == EntityState.Modified)
+			.Where(e => e.Property(i => i.Status).IsModified);
+
+		foreach (var entry in entries)
+		{
+			var history = new IssueStatusHistory
+			{
+				Id = Guid.NewGuid(),
+				IssueId = entry.Entity.Id,
+				Status = entry.Entity.Status,
+				ChangedAt = DateTime.UtcNow
+			};
+			
+			IssueStatusHistory.Add(history);
 		}
 	}
 }
