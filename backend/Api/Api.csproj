@@ -23,7 +23,6 @@
       <Folder Include="Controllers\StatusHistoryController\" />
       <Folder Include="Controllers\UserController\" />
       <Folder Include="Repositories\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>
