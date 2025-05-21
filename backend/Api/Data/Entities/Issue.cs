@@ -16,7 +16,8 @@ public class Issue : IAuditable
 	[Required, MaxLength(1000), MinLength(50)]
 	public string Description { get; set; }
 
-	public string? Response { get; set; }
+	[MaxLength(1000)]
+	public string? Notes { get; set; }
 	public DateTime CreatedAt { get; set; }
 	public DateTime UpdatedAt { get; set; }
 
