@@ -1,5 +1,6 @@
 using System.Net;
 using System.Security.Authentication;
+using Api.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Middleware.GlobalErrorHandlingMiddleware;
@@ -29,6 +30,7 @@ public class GlobalErrorHandlingMiddleware(RequestDelegate next, ILogger<GlobalE
 			case DirectoryNotFoundException:
 			case FileNotFoundException:
 			case KeyNotFoundException:
+			case NotFoundException:
 				status = HttpStatusCode.NotFound;
 				message = "The requested resource was not found.";
 				break;
