@@ -5,11 +5,11 @@ namespace Api.Services.IssueService;
 
 public interface IIssueService
 {
-	Task<List<IssueResponseDto>> GetAllAsync();
+	Task<IEnumerable<IssueResponseDto>> GetAllAsync();
 	Task<IssueResponseDto> GetByIdAsync(Guid id);
-	Task<Guid> CreateAsync(IssueCreateDto issue);
-	Task UpdateAsync(IssueUpdateDto issue);
+	Task<Guid> CreateAsync(IssueCreateDto issueDto);
+	Task UpdateAsync(IssueUpdateDto issueDto);
 	Task DeleteAsync(Guid id);
-	Task<List<IssueResponseDto>> GetByFilterAsync(IssueFilterDto filter);
+	Task<IEnumerable<IssueResponseDto>> GetByFilterAsync(IssueFilterDto filter);
 	Task UpdateStatusAsync(Guid id, IssueStatusUpdateDto status);
 }
