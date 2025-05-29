@@ -18,5 +18,8 @@ public class Customer
 
 	[Required] public Address Address { get; set; }
 	
+	public string? UserId { get; set; }
+	public User User { get; set; }
+	
 	public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

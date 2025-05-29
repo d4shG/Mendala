@@ -75,6 +75,12 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 				.HasForeignKey(h => h.IssueId)
 				.IsRequired();
 		});
+		
+		modelBuilder.Entity<User>()
+			.HasMany(u => u.Customers)
+			.WithOne(c => c.User)
+			.HasForeignKey(c => c.UserId)
+			.IsRequired(false);
 
 		
 	}

@@ -9,4 +9,6 @@ public class User : IdentityUser, IAuditable
 	public DateTime UpdatedAt { get; set; }
 	
 	public ICollection<Issue> Issues { get; set; } = new List<Issue>();
+	public ICollection<Customer> Customers { get; set; }
+
 }
