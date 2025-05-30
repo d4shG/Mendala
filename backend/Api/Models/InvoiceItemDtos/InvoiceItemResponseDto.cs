@@ -1,10 +1,10 @@
+using Api.Models.ProductDtos;
+
 namespace Api.Models.InvoiceItemDtos;
 
 public record InvoiceItemResponseDto(
 	Guid Id, 
-	Guid ProductId,
-	string Name,
-	string Sku,
+	ProductResponseDto Product,
 	decimal Price,
 	int Quantity
 );
