@@ -1,8 +1,8 @@
 using Api.Data.Entities;
 using Api.Exceptions;
-using Api.Models.Enums;
 using Api.Models.IssueDtos;
 using Api.Repositories.IssueRepository;
+using Api.Utils.DtoMapper;
 
 namespace Api.Services.IssueService;
 
@@ -12,14 +12,17 @@ public class IssueService(IIssueRepository repository) : IIssueService
 	{
 		var issues = await repository.GetAllAsync();
 
-		return issues.Select(ConvertIssueToIssueResponseDto);
+		return issues.Select(DtoMapper.ConvertIssueToIssueResponseDto);
 	}
 
 	public async Task<IssueResponseDto> GetByIdAsync(Guid id)
 	{
 		var issue = await repository.GetByIdAsync(id);
+		
+		if (issue == null)
+			throw new NotFoundException($"Issue with ID {id} not found.");
 
-		return ConvertIssueToIssueResponseDto(issue);
+		return DtoMapper.ConvertIssueToIssueResponseDto(issue);
 	}
 
 	public async Task<Guid> CreateAsync(IssueCreateDto issueDto)
@@ -98,7 +101,7 @@ public class IssueService(IIssueRepository repository) : IIssueService
 
 		var issues = await repository.FilterAsync(filter);
 
-		return issues.Select(ConvertIssueToIssueResponseDto);
+		return issues.Select(DtoMapper.ConvertIssueToIssueResponseDto);
 	}
 
 	public async Task UpdateStatusAsync(Guid id, IssueStatusUpdateDto status)
@@ -124,22 +127,6 @@ public class IssueService(IIssueRepository repository) : IIssueService
 		if (hasChanges)
 			await repository.UpdateAsync(issue);
 	}
-
-	private IssueResponseDto ConvertIssueToIssueResponseDto(Issue issue) =>
-		new IssueResponseDto(
-			issue.Id,
-			issue.Title,
-			issue.Description,
-			issue.CreatorId,
-			issue.Creator.UserName ?? "Admin",
-			issue.InvoiceId,
-			issue.Invoice.InvoiceNumber,
-			issue.Invoice.CustomerId,
-			issue.Invoice.Customer.Name,
-			issue.Status,
-			issue.Notes ?? null,
-			issue.CreatedAt
-		);
 
 	private bool IsDtoEmpty<T>(T dto) where T : class
 	{
