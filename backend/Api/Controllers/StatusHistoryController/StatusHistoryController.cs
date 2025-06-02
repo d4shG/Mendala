@@ -10,19 +10,11 @@ public class StatusHistoryController(IStatusHistoryService service) : Controller
 {
 	
 	[HttpGet]
-	public async Task<IActionResult> GetAverageTimeToResolve()
+	public async Task<IActionResult> GetResolveAnalytics()
 	{
-		var avgTime = await service.GetAverageTimeToResolveAsync();
+		var resolveAnalytics = await service.GetResolveAnalyticsAsync();
 		
-		return Ok(avgTime);
-	}
-	
-	[HttpGet]
-	public async Task<IActionResult> GetStatusCounts()
-	{
-		var statusCounts = await service.GetStatusCountsAsync();
-		
-		return Ok(statusCounts);
+		return Ok(resolveAnalytics);
 	}
 	
 	
