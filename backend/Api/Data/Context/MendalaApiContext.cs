@@ -119,6 +119,12 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 	
 	private void AddStatusHistoryEntries()
 	{
+		AddHistoryForCreated();
+		AddHistoryForModified();
+	}
+
+	private void AddHistoryForModified()
+	{
 		var entries = ChangeTracker.Entries<Issue>()
 			.Where(e => e.State == EntityState.Modified)
 			.Where(e => e.Property(i => i.Status).IsModified);
@@ -133,6 +139,25 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 				ChangedAt = DateTime.UtcNow
 			};
 			
+			IssueStatusHistory.Add(history);
+		}
+	}
+
+	private void AddHistoryForCreated()
+	{
+		var addedEntries = ChangeTracker.Entries<Issue>()
+			.Where(e => e.State == EntityState.Added);
+
+		foreach (var entry in addedEntries)
+		{
+			var history = new IssueStatusHistory
+			{
+				Id = Guid.NewGuid(),
+				IssueId = entry.Entity.Id,
+				Status = entry.Entity.Status,
+				ChangedAt = DateTime.UtcNow
+			};
+
 			IssueStatusHistory.Add(history);
 		}
 	}
