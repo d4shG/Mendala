@@ -1,9 +1,11 @@
 using Api.Data.Entities;
 using Api.Models.CustomerDtos;
+using Api.Models.Enums;
 using Api.Models.InvoiceDtos;
 using Api.Models.InvoiceItemDtos;
 using Api.Models.IssueDtos;
 using Api.Models.ProductDtos;
+using Api.Models.StatusHistoryDtos;
 
 namespace Api.Utils.DtoMapper;
 
@@ -61,9 +63,11 @@ public static class DtoMapper
 			items
 			);
 	}
-	
-	
 
-	
-	
+	public static StatusHistoryResponseDto ConvertIssueStatusHistoryToStatusHistoryResponseDto(
+		IssueStatusHistory statusHistory) =>
+		new StatusHistoryResponseDto(
+			statusHistory.Status,
+			statusHistory.ChangedAt);
+
 }
