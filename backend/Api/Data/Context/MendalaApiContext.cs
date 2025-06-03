@@ -14,6 +14,7 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 	public DbSet<Product> Products { get; set; }
 	public DbSet<Customer> Customers { get; set; }
 	public DbSet<IssueStatusHistory> IssueStatusHistory { get; set; }
+	public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
