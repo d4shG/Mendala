@@ -7,7 +7,7 @@ namespace Api.Controllers.InvoiceController;
 [Route("[controller]")]
 public class InvoiceController(IInvoiceService service): ControllerBase
 {
-	[HttpGet]
+	[HttpGet("get-by-invoice-id/{invoiceId:guid}")]
 	public async Task<IActionResult> GetByInvoiceId(Guid invoiceId)
 	{
 		var invoice = await service.GetInvoiceByIdAsync(invoiceId);
@@ -15,7 +15,7 @@ public class InvoiceController(IInvoiceService service): ControllerBase
 		return Ok(invoice);
 	}
 	
-	[HttpGet]
+	[HttpGet("get-by-customer-id/{customerId:guid}")]
 	public async Task<IActionResult> GetByCustomerIdAsync(Guid customerId)
 	{
 		var invoices = await service.GetByCustomerId(customerId);

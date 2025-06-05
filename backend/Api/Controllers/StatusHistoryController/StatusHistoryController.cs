@@ -9,7 +9,7 @@ namespace Api.Controllers.StatusHistoryController;
 public class StatusHistoryController(IStatusHistoryService service) : ControllerBase
 {
 	
-	[HttpGet]
+	[HttpGet("/resolve-analytics")]
 	public async Task<IActionResult> GetResolveAnalytics()
 	{
 		var resolveAnalytics = await service.GetResolveAnalyticsAsync();
@@ -18,7 +18,7 @@ public class StatusHistoryController(IStatusHistoryService service) : Controller
 	}
 	
 	
-	[HttpGet]
+	[HttpGet("get-by-issue-id/{issueId:guid}")]
 	public async Task<IActionResult> GetHistoryForIssue(Guid issueId)
 	{
 		var statusHistory = await service.GetByIssueIdAsync(issueId);

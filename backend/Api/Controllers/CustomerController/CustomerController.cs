@@ -7,7 +7,7 @@ namespace Api.Controllers.CustomerController;
 [Route("[controller]")]
 public class CustomerController(ICustomerService service): ControllerBase
 {
-	[HttpGet]
+	[HttpGet("get-by-id/{customerId:guid}")]
 	public async Task<IActionResult> GetById(Guid customerId)
 	{
 		var customer = await service.GetByCustomerIdAsync(customerId);
@@ -15,7 +15,7 @@ public class CustomerController(ICustomerService service): ControllerBase
 		return Ok(customer);
 	}
 
-	[HttpGet]
+	[HttpGet("get-by-email/{email}")]
 	public async Task<IActionResult> GetByEmail(string email)
 	{
 		var customers = await service.GetByEmailAsync(email);

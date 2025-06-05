@@ -17,7 +17,7 @@ public class IssueController(IIssueService issueService) : ControllerBase
 		return Ok(issues);
 	}
 
-	[HttpGet("{id}")]
+	[HttpGet("get-by-id/{id:guid}")]
 	public async Task<IActionResult> GetIssueById(Guid id)
 	{
 		var issue = await issueService.GetByIdAsync(id);
@@ -44,7 +44,7 @@ public class IssueController(IIssueService issueService) : ControllerBase
 		return NoContent();
 	}
 
-	[HttpDelete("{id}")]
+	[HttpDelete("{id:guid}")]
 	public async Task<IActionResult> Delete(Guid id)
 	{
 		await issueService.DeleteAsync(id);
@@ -59,7 +59,7 @@ public class IssueController(IIssueService issueService) : ControllerBase
 		return Ok(issues);
 	}
 	
-	[HttpPatch("{id}/status")]
+	[HttpPatch("status/{id:guid}")]
 	public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] IssueStatusUpdateDto statusUpdateDto)
 	{
 		await issueService.UpdateStatusAsync(id, statusUpdateDto);

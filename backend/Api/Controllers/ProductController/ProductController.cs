@@ -8,7 +8,7 @@ namespace Api.Controllers.ProductController;
 [Route("[controller]")]
 public class ProductController(IProductService service): ControllerBase
 {
-	[HttpGet]
+	[HttpGet("get-by-id/{productId:guid}")]
 	public async Task<IActionResult> GetById(Guid productId)
 	{
 		var product = await service.GetByProductIdAsync(productId);
