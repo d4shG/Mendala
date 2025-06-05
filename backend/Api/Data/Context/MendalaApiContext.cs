@@ -33,11 +33,16 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 				.IsRequired();
 		});
 
-		modelBuilder.Entity<Customer>()
-			.HasMany(c => c.Invoices)
-			.WithOne(i => i.Customer) 
-			.HasForeignKey(i => i.CustomerId) 
-			.IsRequired();
+		modelBuilder.Entity<Customer>(entity =>
+		{
+			entity.HasMany(c => c.Invoices)
+				.WithOne(i => i.Customer) 
+				.HasForeignKey(i => i.CustomerId) 
+				.IsRequired();
+			
+			entity.OwnsOne(c => c.Address);
+		});
+			
 		
 		modelBuilder.Entity<Product>()
 			.HasMany(p => p.InvoiceItems)
@@ -67,6 +72,8 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 				.WithOne(ii => ii.Invoice)
 				.HasForeignKey(ii => ii.InvoiceId)
 				.IsRequired();
+			
+			entity.OwnsOne(i => i.Address);
 		});
 		
 		modelBuilder.Entity<IssueStatusHistory>(b =>
@@ -82,6 +89,12 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 			.WithOne(c => c.User)
 			.HasForeignKey(c => c.UserId)
 			.IsRequired(false);
+		
+		modelBuilder.Entity<RefreshToken>(entity =>
+		{
+			entity.HasKey(e => e.Token);
+		});
+
 
 		
 	}
