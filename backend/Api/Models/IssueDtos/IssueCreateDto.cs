@@ -7,5 +7,5 @@ public record IssueCreateDto(
 	string Title,
 	string Description,
 	Guid InvoiceId,
-	Guid CreatorId
+	string CreatorId
 	);

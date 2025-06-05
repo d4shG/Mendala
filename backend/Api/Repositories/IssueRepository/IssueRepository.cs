@@ -44,7 +44,7 @@ public class IssueRepository(MendalaApiContext context): IIssueRepository
 	{
 		var query = context.Issues.AsQueryable();
 
-		if (filterDto.CreatorId.HasValue)
+		if (!string.IsNullOrEmpty(filterDto.CreatorId))
 			query = query.Where(i => i.CreatorId == filterDto.CreatorId);
 
 		if (filterDto.CustomerId.HasValue)

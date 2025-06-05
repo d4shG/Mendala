@@ -6,7 +6,7 @@ public record IssueResponseDto(
 	Guid Id,
 	string Title,
 	string Description,
-	Guid CreatorId,
+	string CreatorId,
 	string CreatorName,
 	Guid CustomerId,
 	string CustomerName,

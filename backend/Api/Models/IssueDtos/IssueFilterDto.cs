@@ -3,7 +3,7 @@ using Api.Models.Enums;
 namespace Api.Models.IssueDtos;
 
 public record IssueFilterDto(
-	Guid? CreatorId,
+	string? CreatorId,
 	Guid? CustomerId,
 	IssueStatus? Status,
 	DateTime? CreatedAfter,

@@ -24,7 +24,7 @@ public class Issue : IAuditable
 	[Required] public Guid InvoiceId { get; set; }
 	public Invoice Invoice { get; set; }
 
-	[Required] public Guid CreatorId { get; set; }
+	[Required] public string CreatorId { get; set; }
 	public User Creator { get; set; }
 	
 	public ICollection<IssueStatusHistory> StatusHistory { get; set; } = new List<IssueStatusHistory>();
