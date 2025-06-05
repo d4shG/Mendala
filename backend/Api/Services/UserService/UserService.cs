@@ -13,7 +13,7 @@ namespace Api.Services.UserService
 {
 	public class UserService(
 		UserManager<User> userManager,
-		RoleManager<User> roleManager,
+		RoleManager<IdentityRole> roleManager,
 		ITokenService tokenService)
 		: IUserService
 	{
@@ -115,7 +115,7 @@ namespace Api.Services.UserService
 			if (user == null)
 				throw new AuthenticationException("User with given id not found!");
 			
-			await tokenService.MarkTokenForUsed(refreshToken);
+			await tokenService.MarkTokenForUsed(refreshToken, id);
 			
 			return await tokenService.CreateTokens(user);
 		}

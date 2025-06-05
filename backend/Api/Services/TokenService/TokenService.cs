@@ -35,9 +35,10 @@ namespace Api.Services.TokenService
             return new TokenDto(new JwtSecurityTokenHandler().WriteToken(token), refreshToken, AccessTokenExpirationMinutes, AccessTokenExpirationMinutes);
         }
 
-        public async Task MarkTokenForUsed(string token)
+        public async Task MarkTokenForUsed(string token, string userId)
         {
             var updatedRefresh = await repository.GetByTokenAsync(token);
+            
             if (updatedRefresh == null || 
                 updatedRefresh.IsUsed || 
                 updatedRefresh.IsRevoked || 
@@ -45,6 +46,9 @@ namespace Api.Services.TokenService
             {
                 throw new UnauthorizedAccessException("Invalid or expired refresh token.");
             }
+            
+            if (updatedRefresh.UserId != userId)
+                throw new UnauthorizedAccessException("Id mismatch!");
             
             updatedRefresh.IsUsed = true;
             await repository.UpdateAsync(updatedRefresh);
