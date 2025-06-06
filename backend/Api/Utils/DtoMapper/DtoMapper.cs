@@ -25,9 +25,9 @@ public static class DtoMapper
 			issue.CreatorId,
 			issue.Creator.UserName ?? "Admin",
 			issue.InvoiceId,
-			issue.Invoice.InvoiceNumber,
-			issue.Invoice.CustomerId,
 			issue.Invoice.Customer.Name,
+			issue.Invoice.CustomerId,
+			issue.Invoice.InvoiceNumber,
 			issue.Status,
 			issue.Notes ?? null,
 			issue.CreatedAt
