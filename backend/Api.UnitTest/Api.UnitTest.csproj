@@ -23,10 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ServiceTests\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Api\Api.csproj" />
     </ItemGroup>
 
