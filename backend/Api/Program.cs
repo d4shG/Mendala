@@ -1,6 +1,7 @@
 using System.Text;
 using Api.Data.Context;
 using Api.Data.Entities;
+using Api.Data.Seeder;
 using Api.Middleware.GlobalErrorHandlingMiddleware;
 using Api.Repositories.CustomerRepository;
 using Api.Repositories.InvoiceRepository;
@@ -45,9 +46,13 @@ using (var scope = app.Services.CreateScope())
 	var services = scope.ServiceProvider;
 	
 	var db = services.GetRequiredService<MendalaApiContext>();
-	
+
 	if (db.Database.IsRelational())
+	{
 		db.Database.Migrate();
+		await SeedDatabaseAsync(services, builder, db);
+	}
+
 	
 }
 
@@ -157,4 +162,14 @@ void AddCookiePolicy(WebApplicationBuilder builder3)
 		options.Secure = CookieSecurePolicy.Always;
 		options.MinimumSameSitePolicy = SameSiteMode.None;
 	});
+}
+
+async Task SeedDatabaseAsync(IServiceProvider serviceProvider, WebApplicationBuilder webApplicationBuilder2,
+	MendalaApiContext ladleMeThisContext)
+{
+	var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+	var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+	var seeder = new DataSeeder(userManager, roleManager, ladleMeThisContext);
+	await seeder.SeedAsync();
 }

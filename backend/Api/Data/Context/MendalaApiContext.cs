@@ -141,7 +141,8 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 	{
 		var entries = ChangeTracker.Entries<Issue>()
 			.Where(e => e.State == EntityState.Modified)
-			.Where(e => e.Property(i => i.Status).IsModified);
+			.Where(e => e.Property(i => i.Status).IsModified)
+			.ToList();
 
 		foreach (var entry in entries)
 		{
@@ -160,7 +161,8 @@ public class MendalaApiContext(DbContextOptions<MendalaApiContext> options)
 	private void AddHistoryForCreated()
 	{
 		var addedEntries = ChangeTracker.Entries<Issue>()
-			.Where(e => e.State == EntityState.Added);
+			.Where(e => e.State == EntityState.Added)
+			.ToList();
 
 		foreach (var entry in addedEntries)
 		{

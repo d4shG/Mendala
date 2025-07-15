@@ -28,7 +28,8 @@ public static class DtoMapper
 			issue.Invoice.Customer.Name,
 			issue.Invoice.CustomerId,
 			issue.Invoice.InvoiceNumber,
-			issue.Status,
+			issue.Status.ToString(),
+			issue.Type.ToString(),
 			issue.Notes ?? null,
 			issue.CreatedAt
 		);

@@ -12,6 +12,7 @@ public record IssueResponseDto(
 	string CustomerName,
 	Guid InvoiceId,
 	string InvoiceNumber,
-	IssueStatus Status,
+	string Status,
+	string Type,
 	string? Notes,
 	DateTime CreatedAt);
