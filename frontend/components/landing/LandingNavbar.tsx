@@ -6,25 +6,22 @@ import {
 	NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-
 import { Button, buttonVariants } from "../ui/button";
 import { Menu } from "lucide-react";
 import ThemeSelector from "../general/ThemeSelector";
-import LoginForm from "./LoginForm";
+import { RouteProps } from "@/types/landing_types";
+import { useLoginModal } from "@/context/LoginModalContext";
 
-interface RouteProps {
-	href: string;
-	label: string;
-}
+
 
 const routeList: RouteProps[] = [
 	{
-		href: "#features",
-		label: "Features",
+		href: "#about",
+		label: "About",
 	},
 	{
-		href: "#testimonials",
-		label: "Testimonials",
+		href: "#features",
+		label: "Features",
 	},
 	{
 		href: "#pricing",
@@ -38,11 +35,11 @@ const routeList: RouteProps[] = [
 
 export default function LandingNavbar() {
 	const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+	const { setIsModalOpen } = useLoginModal();
 	return (
 		<header className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
 			<NavigationMenu className="mx-auto">
-				<NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
+				<NavigationMenuList className="container h-14 px-4 w-screen flex justify-between">
 					<NavigationMenuItem className="font-bold flex">
 						<a
 							rel="noreferrer noopener"
@@ -54,7 +51,7 @@ export default function LandingNavbar() {
 
 					{/* mobile */}
 					<span className="flex md:hidden">
-						<Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+						<Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} >
 							<SheetTrigger className="px-2">
 								<Menu className="flex md:hidden h-5 w-5"></Menu>
 							</SheetTrigger>
@@ -75,7 +72,9 @@ export default function LandingNavbar() {
 										</a>
 									))}
 
-									<Button className="w-[110px] border" variant={"secondary"}>
+									<Button className="w-[110px] border" variant={"secondary"} onClick={() =>{ setIsModalOpen(true)
+									setIsSheetOpen(false)}	
+									}>
 										Join
 									</Button>
 								</nav>
@@ -106,7 +105,6 @@ export default function LandingNavbar() {
 					<ThemeSelector />
 				</NavigationMenuList>
 			</NavigationMenu>
-			<LoginForm open={isModalOpen} setOpen={setIsModalOpen} />
 		</header>
 	);
 }
